@@ -17,8 +17,10 @@ ActiveRecord::Schema.define(version: 2024_02_21_172239) do
 
   create_table "answers", force: :cascade do |t|
     t.text "body"
+    t.bigint "question_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
   create_table "questions", force: :cascade do |t|
