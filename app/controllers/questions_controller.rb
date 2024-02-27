@@ -1,18 +1,15 @@
+# frozen_string_literal: true
+
 class QuestionsController < ApplicationController
-
-
   def index
-    @questions = Question.all    
+    @questions = Question.all
   end
 
-  def show
-  end
+  def show; end
 
-  def new
-  end
+  def new; end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @question = Question.new(question_params)
@@ -36,11 +33,11 @@ class QuestionsController < ApplicationController
     question.destroy
     redirect_to question_path
   end
-  
+
   private
-  
+
   def question
-    @question ||= params[:id] ? Question.find(params[:id]) : Question.new  
+    @question ||= params[:id] ? Question.find(params[:id]) : Question.new
   end
 
   helper_method :question
@@ -48,5 +45,4 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(:title, :body)
   end
-  
 end

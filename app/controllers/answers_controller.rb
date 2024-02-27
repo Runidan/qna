@@ -1,12 +1,12 @@
-class AnswersController < ApplicationController
+# frozen_string_literal: true
 
+class AnswersController < ApplicationController
   def index
     @question = Question.find(params[:question_id])
     @answers = @question.answers
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @question = Question.find(params[:question_id])
@@ -26,9 +26,7 @@ class AnswersController < ApplicationController
 
   private
 
-    def answer_params
-      params.require(:answer).permit(:body)
-    end
-
-
+  def answer_params
+    params.require(:answer).permit(:body)
+  end
 end
