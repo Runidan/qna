@@ -167,6 +167,10 @@ GEM
       bundler (>= 1.15.0)
       railties (= 6.1.7.6)
       sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.5)
+      actionpack (>= 5.0.1.rc1)
+      actionview (>= 5.0.1.rc1)
+      activesupport (>= 5.0.1.rc1)
     rails-dom-testing (2.2.0)
       activesupport (>= 5.0.0)
       minitest
@@ -247,6 +251,13 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (6.1.0)
       activesupport (>= 5.2.0)
+    slim (5.2.1)
+      temple (~> 0.10.0)
+      tilt (>= 2.1.0)
+    slim-rails (3.6.3)
+      actionpack (>= 3.1)
+      railties (>= 3.1)
+      slim (>= 3.0, < 6.0, != 5.0.0)
     spring (4.1.3)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
@@ -255,6 +266,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    temple (0.10.3)
     thor (1.3.0)
     tilt (2.3.0)
     timeout (0.4.1)
@@ -305,6 +317,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
   rails (~> 6.1.4)
+  rails-controller-testing
   rspec-rails (~> 6.1.0)
   rubocop (~> 1.6)
   rubocop-performance (~> 1)
@@ -312,6 +325,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers (~> 6.0)
+  slim-rails
   spring
   turbolinks (~> 5)
   tzinfo-data
