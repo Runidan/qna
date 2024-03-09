@@ -1,11 +1,9 @@
 require 'rails_helper'
 
 feature 'Viewing questions' do
-  # Создаем тестового пользователя
-  given(:user) { create(:user) }
 
   # Создаем несколько тестовых вопросов
-  given(:questions) { create_list(:question, 3) }
+  given!(:questions) { create_list(:question, 3) }
 
   scenario 'user can see a list of questions' do
     # Посещаем страницу со списком вопросов

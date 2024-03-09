@@ -2,8 +2,7 @@
 
 class AnswersController < ApplicationController
   def index
-    @question = Question.find(params[:question_id])
-    @answers = @question.answers
+    redirect_to question_path Question.find(params[:question_id])
   end
 
   def show; end

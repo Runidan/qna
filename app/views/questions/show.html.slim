@@ -1,2 +1,17 @@
 h1= question.title
 p= question.body
+
+ul
+- @answers.each do |answer|
+  li= link_to answer.body, answer_path
+
+- if current_user
+  = form_for [@question, Answer.new] do |f|
+    .field
+      = f.label :body
+      br
+      = f.text_area :body
+    .actions
+      = f.submit "Answer"
+
+
