@@ -3,9 +3,10 @@
 FactoryBot.define do
   factory :answer do
     sequence(:body) { |n| "Answer №#{n}" }
+
   end
 
-  trait :invalid do
+  trait :invalid_answer do
     body { nil }
   end
 end

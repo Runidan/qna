@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: %i[index show]
+
   def index
     redirect_to question_path Question.find(params[:question_id])
   end
@@ -9,7 +11,12 @@ class AnswersController < ApplicationController
 
   def new
     question = Question.find(params[:question_id])
-    redirect_to question_path(question)
+    if current_user
+      redirect_to question_path(question) 
+    else
+      redirect_to new_user_session_path
+    end
+    
   end
 
   def create
