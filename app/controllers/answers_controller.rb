@@ -8,8 +8,8 @@ class AnswersController < ApplicationController
   def show; end
 
   def new
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.new
+    question = Question.find(params[:question_id])
+    redirect_to question_path(question)
   end
 
   def create
@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@question)
     else
-      render :new
+      render 'questions/show'
     end
   end
 
