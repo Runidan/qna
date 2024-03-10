@@ -21,7 +21,14 @@ RSpec.describe QuestionsController do
   end
 
   describe 'GET #show' do
+    let!(:answers) { create_list(:answer, 3, question: question) }
     before { get :show, params: { id: question } }
+
+    it 'shows the question and its answers' do
+      expect(response).to be_successful
+      expect(assigns(:question)).to eq(question)
+      expect(assigns(:question).answers).to match_array(answers)
+    end
 
     it 'render show view' do
       expect(response).to render_template :show

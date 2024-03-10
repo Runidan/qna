@@ -7,7 +7,7 @@ ul
 
 - if current_user
   = render '/shared/errors', resource: @answer
-  = form_for [@question, @answer] do |f|
+  = form_for [@question, @answer], local: true do |f|
     .field
       = f.label :body
       br

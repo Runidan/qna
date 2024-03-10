@@ -4,18 +4,14 @@ require 'rails_helper'
 
 RSpec.describe AnswersController do
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     before { get :index, params: { question_id: question.id } }
 
-    it 'populates an array of all answers of question' do
-      answers = create_list(:answer, 3, question:)
-      expect(response).to be_successful
-      expect(assigns(:answers)).to eq(answers)
-    end
 
-    it 'renders index view' do
-      expect(response).to render_template :index
+    it 'redirects to the question show page' do
+      expect(response).to redirect_to(question_path(question))
     end
   end
 
@@ -29,22 +25,23 @@ RSpec.describe AnswersController do
   end
 
   describe 'GET #new' do
-    before { get :new, params: { question_id: question.id } }
-
-    it 'returns a new answer form' do
-      expect(response).to be_successful
-      expect(assigns(:answer)).to be_a_new(Answer)
-      expect(assigns(:question)).to eq(question)
+    before do 
+      login(user)
+      get :new, params: { question_id: question.id }
     end
+      
 
-    it 'renders the :new template' do
-      expect(response).to render_template(:new)
+    it 'redirects to the question show page' do
+      expect(response).to redirect_to(question_path(question))
     end
   end
 
   describe 'POST #create' do
     context 'with valid attributes' do
-      before { post :create, params: { question_id: question.id, answer: { body: 'Answer body' } } }
+      before do
+        login(user)
+        post :create, params: { question_id: question.id, answer: { body: 'Answer body' } }
+      end
 
       it 'creates a new answer' do
         expect(Answer.last.body).to eq('Answer body')
@@ -56,6 +53,7 @@ RSpec.describe AnswersController do
     end
 
     context 'with invalid attributes' do
+      before { login(user) }
       it 'does not save the answer' do
         expect do
           post :create, params: { question_id: question.id, answer: { body: '' } }
@@ -64,7 +62,7 @@ RSpec.describe AnswersController do
 
       it 're-renders new view' do
         post :create, params: { question_id: question.id, answer: { body: '' } }
-        expect(response).to render_template(:new)
+        expect(response).to render_template('questions/show')
       end
     end
   end

@@ -11,7 +11,7 @@ feature 'User can create question', "
 
   describe 'Authenticated user' do
     background do
-      sigh_in(user)
+      sign_in(user)
       visit questions_path
       click_on 'Ask question'
     end
