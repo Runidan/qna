@@ -1,12 +1,13 @@
-h1= question.title
-p= question.body
+h1= @question.title
+p= @question.body
 
 ul
-- @answers.each do |answer|
-  li= link_to answer.body, answer_path
+- @question.answers.each do |answer|
+  li= answer.body
 
 - if current_user
-  = form_for [@question, Answer.new] do |f|
+  = render '/shared/errors', resource: @answer
+  = form_for [@question, @answer] do |f|
     .field
       = f.label :body
       br
