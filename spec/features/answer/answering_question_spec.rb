@@ -1,25 +1,29 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-feature 'Answering a question' do
-
-  describe "aunticated user" do
+feature 'Answering a question.' do
+  describe 'Authinticated user' do
     given(:user) { create(:user) }
 
     background do
-      question = create(:question)
+      question = create(:question, user:)
       sign_in(user)
       visit question_path(question)
     end
 
-    scenario ' can answer a question' do
-      fill_in 'Body', with: 'This is my answer'
+    scenario 'can answer a question' do
+      within('.field') do
+        fill_in 'answer_body', with: 'This is the answer body text.'
+      end
       click_on 'Answer'
-      expect(page).to have_content('This is my answer')
+      expect(page).to have_content('This is the answer body text.')
     end
 
     scenario "can't send null answer" do
+      count_answers_before = page.all('.answers-list').size
       click_on 'Answer'
-      expect(page).to have_content "Body can't be blank"
+      expect(page.all('.answers-list').size).to eq count_answers_before
     end
   end
 

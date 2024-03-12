@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user:) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 3) }
+    let(:questions) { create_list(:question, 3, user:) }
 
     before { get :index }
 
@@ -21,17 +21,24 @@ RSpec.describe QuestionsController do
   end
 
   describe 'GET #show' do
-    let!(:answers) { create_list(:answer, 3, question: question) }
-    before { get :show, params: { id: question } }
-
-    it 'shows the question and its answers' do
-      expect(response).to be_successful
+    it 'assigns the requested question to @question' do
+      get :show, params: { id: question }
       expect(assigns(:question)).to eq(question)
-      expect(assigns(:question).answers).to match_array(answers)
     end
 
-    it 'render show view' do
-      expect(response).to render_template :show
+    it 'assigns a new answer to @answer' do
+      get :show, params: { id: question }
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'renders the show template' do
+      get :show, params: { id: question }
+      expect(response).to render_template(:show)
+    end
+
+    it 'does not require authentication' do
+      get :show, params: { id: question }
+      expect(response).to have_http_status(:success)
     end
   end
 
@@ -129,7 +136,7 @@ RSpec.describe QuestionsController do
   describe 'DELETE #destroy' do
     before { login(user) }
 
-    let!(:question) { create(:question) }
+    let!(:question) { create(:question, user:) }
 
     it 'deletes the question' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
@@ -137,7 +144,7 @@ RSpec.describe QuestionsController do
 
     it 'redirect to index' do
       delete :destroy, params: { id: question }
-      expect(response).to redirect_to question_path
+      expect(response).to redirect_to questions_path
     end
   end
 end

@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 feature 'Viewing questions' do
-
   # Создаем несколько тестовых вопросов
-  given!(:questions) { create_list(:question, 3) }
+  given(:user) { create(:user) }
+  given!(:questions) { create_list(:question, 3, user:) }
+
+  background { sign_in(user) }
 
   scenario 'user can see a list of questions' do
     # Посещаем страницу со списком вопросов

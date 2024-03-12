@@ -1,0 +1,14 @@
+= render '/shared/errors', resource: @question
+
+= form_with model: @question do |f|
+  div class="mb-3 row"
+    div class="col-sm-2 col-form-label"
+      = f.label :title
+    div class="col-sm-10"
+      = f.text_field :title, class: 'form-control' 
+  div class="mb-3 row"
+    div class="col-sm-2 col-form-label"
+      = f.label :body
+    div class="col-sm-10"
+      = f.text_area :body
+  = f.submit 'Ask', class: 'btn btn-primary'
