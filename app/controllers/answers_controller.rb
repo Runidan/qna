@@ -1,30 +1,28 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
+  before_action :authenticate_user!, except: %i[index destroy]
+  before_action :load_answer, only: %i[destroy]
+  before_action :load_question, only: %i[index create]
 
   def index
-    redirect_to question_path Question.find(params[:question_id])
-  end
-
-  def show; end
-
-  def new
-    question = Question.find(params[:question_id])
-    if current_user
-      redirect_to question_path(question) 
-    else
-      redirect_to new_user_session_path
-    end
-    
+    redirect_to question_path @question
   end
 
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.build(answer_params)
+    @answer.user = current_user
 
     if @answer.save
-      redirect_to question_path(@question)
+      redirect_to question_path(@question), notice: 'Answer was  successfully added.'
+    else
+      render 'questions/show'
+    end
+  end
+
+  def destroy
+    if @answer.permit?(current_user) && @answer.destroy
+      redirect_to question_path(@answer.question), notice: 'Answer was successfully deleted.'
     else
       render 'questions/show'
     end
@@ -34,5 +32,13 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
+  end
+
+  def load_answer
+    @answer = Answer.find(params[:id])
+  end
+
+  def load_question
+    @question = Question.find(params[:question_id])
   end
 end

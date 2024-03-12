@@ -2,14 +2,14 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: %i[show edit update destroy]
 
   def index
     @questions = Question.all
   end
 
   def show
-    @answer = @question.answers.new if current_user
+    @answer = @question.answers.build
   end
 
   def new
@@ -20,16 +20,19 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.user = current_user
 
     if @question.save
-      redirect_to @question, notice: 'Your question successfully created.'
+      flash[:success] = 'Your question successfully created.'
+      redirect_to @question
     else
       render :new
     end
   end
 
   def update
-    if @question.update(question_params)
+    if @question.permit?(current_user) && @question.update(question_params)
+      flash[:success] = 'Question was successfully updated.'
       redirect_to @question
     else
       render :edit
@@ -37,8 +40,12 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    redirect_to question_path
+    if @question.permit?(current_user) && @question.destroy
+      flash[:success] = 'Question was successfully deleted.'
+      redirect_to questions_path
+    else
+      render :show
+    end
   end
 
   private

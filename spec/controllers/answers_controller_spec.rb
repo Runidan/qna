@@ -9,28 +9,6 @@ RSpec.describe AnswersController do
   describe 'GET #index' do
     before { get :index, params: { question_id: question.id } }
 
-
-    it 'redirects to the question show page' do
-      expect(response).to redirect_to(question_path(question))
-    end
-  end
-
-  describe 'GET :show' do
-    let(:answer) { create(:answer, question:) }
-
-    it 'render template :show for answer' do
-      get :show, params: { id: answer }
-      expect(response).to render_template :show
-    end
-  end
-
-  describe 'GET #new' do
-    before do 
-      login(user)
-      get :new, params: { question_id: question.id }
-    end
-      
-
     it 'redirects to the question show page' do
       expect(response).to redirect_to(question_path(question))
     end
@@ -40,7 +18,7 @@ RSpec.describe AnswersController do
     context 'with valid attributes' do
       before do
         login(user)
-        post :create, params: { question_id: question.id, answer: { body: 'Answer body' } }
+        post :create, params: { question_id: question.id, answer: { body: 'Answer body' }, user_id: user.id }
       end
 
       it 'creates a new answer' do
@@ -54,6 +32,7 @@ RSpec.describe AnswersController do
 
     context 'with invalid attributes' do
       before { login(user) }
+
       it 'does not save the answer' do
         expect do
           post :create, params: { question_id: question.id, answer: { body: '' } }
