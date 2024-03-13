@@ -14,7 +14,7 @@ class AnswersController < ApplicationController
     @answer.user = current_user
 
     if @answer.save
-      redirect_to question_path(@question), notice: 'Answer was  successfully added.'
+      redirect_to question_path(@question, anchor: "answer-#{@answer.id}"), notice: 'Answer was  successfully added.'
     else
       render 'questions/show'
     end

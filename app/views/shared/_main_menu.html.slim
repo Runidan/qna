@@ -1,0 +1,20 @@
+header class="p-3 bg-dark text-white"
+  .container
+    nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+      ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+        li
+          = link_to('Home', root_path, class: 'nav-link px-2')
+        li
+          = link_to('Questions', questions_path, class: 'nav-link px-2')
+
+      ul class="nav col-12 col-lg-auto mb-2 mb-md-0"
+        -if current_user
+          li.nav-link.px-2.text-white
+            = current_user.email
+          li
+            = link_to("Log Out", destroy_user_session_path, method: :delete, class: "nav-link px-2")
+        -else
+          li
+            = link_to('Log In', new_user_session_path, class: "nav-link px-2")
+          li
+            = link_to('Sign Up', new_user_registration_path, class: "nav-link px-2")
