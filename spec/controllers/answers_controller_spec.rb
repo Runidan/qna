@@ -15,32 +15,41 @@ RSpec.describe AnswersController do
   end
 
   describe 'POST #create' do
-    context 'with valid attributes' do
-      before do
-        login(user)
-        post :create, params: { question_id: question.id, answer: { body: 'Answer body' }, user_id: user.id }
+    let(:answer_params) { { body: 'This is a test answer.' } }
+
+    before { login(user) }
+
+    context 'with valid params' do
+      it 'creates a new answer for the question' do
+        expect do
+          post :create, params: { question_id: question.id, answer: answer_params }
+        end.to change(question.answers, :count).by(1)
       end
 
-      it 'creates a new answer' do
-        expect(Answer.last.body).to eq('Answer body')
+      it 'assigns the created answer to @answer' do
+        post :create, params: { question_id: question.id, answer: answer_params }
+        expect(assigns(:answer)).to be_a(Answer)
+        expect(assigns(:answer).body).to eq(answer_params[:body])
       end
 
-      it 'redirect to question page' do
-        expect(response).to redirect_to(question_path(question))
+      it 'redirects to the question show page with anchor to the new answer' do
+        post :create, params: { question_id: question.id, answer: answer_params }
+        created_answer = question.answers.last
+        expect(response).to redirect_to(question_path(question, anchor: "answer-#{created_answer.id}"))
       end
     end
 
-    context 'with invalid attributes' do
-      before { login(user) }
+    context 'with invalid params' do
+      let(:answer_params) { { body: '' } }
 
-      it 'does not save the answer' do
+      it 'does not create a new answer' do
         expect do
-          post :create, params: { question_id: question.id, answer: { body: '' } }
+          post :create, params: { question_id: question.id, answer: answer_params }
         end.not_to change(Answer, :count)
       end
 
-      it 're-renders new view' do
-        post :create, params: { question_id: question.id, answer: { body: '' } }
+      it 'renders the question show page' do
+        post :create, params: { question_id: question.id, answer: answer_params }
         expect(response).to render_template('questions/show')
       end
     end
