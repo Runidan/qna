@@ -14,7 +14,8 @@ class AnswersController < ApplicationController
     @answer.user = current_user
 
     if @answer.save
-      redirect_to question_path(@question, anchor: "answer-#{@answer.id}"), notice: 'Answer was  successfully added.'
+      flash[:success] = 'Answer was  successfully added.'
+      redirect_to question_path(@question, anchor: "answer-#{@answer.id}")
     else
       render 'questions/show'
     end
@@ -22,7 +23,8 @@ class AnswersController < ApplicationController
 
   def destroy
     if @answer.permit?(current_user) && @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Answer was successfully deleted.'
+      flash[:success] = 'Answer was successfully deleted.'
+      redirect_to question_path(@answer.question)
     else
       render 'questions/show'
     end
