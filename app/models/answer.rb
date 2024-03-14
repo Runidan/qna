@@ -6,8 +6,4 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true, length: { minimum: 3, maximum: 2000 }
   validates :user, presence: true, associated: { class: User }
-
-  def permit?(user)
-    self.user == user
-  end
 end
