@@ -8,14 +8,11 @@ feature 'Viewing a question and its answers' do
     question = create(:question)
     answers = create_list(:answer, 3, question:)
 
-    # Посещаем страницу вопроса
     visit question_path(question)
 
-    # Проверяем, что отображается текст вопроса
     expect(page).to have_content(question.title)
     expect(page).to have_content(question.body)
 
-    # Проверяем, что отображается список ответов
     answers.each do |answer|
       expect(page).to have_content(answer.body)
     end
