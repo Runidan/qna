@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2024_03_11_042324) do
     t.bigint "question_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2024_03_11_042324) do
     t.text "body"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -46,4 +46,6 @@ ActiveRecord::Schema.define(version: 2024_03_11_042324) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "answers", "users"
+  add_foreign_key "questions", "users"
 end
