@@ -6,8 +6,4 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
   validates :user, presence: true, associated: { class: User }
-
-  def permit?(user)
-    self.user == user
-  end
 end

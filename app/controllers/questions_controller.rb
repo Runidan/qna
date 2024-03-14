@@ -31,7 +31,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.permit?(current_user) && @question.update(question_params)
+    if current_user&.author_of?(@question) && @question.update(question_params)
       flash[:success] = 'Question was successfully updated.'
       redirect_to @question
     else
@@ -40,7 +40,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if @question.permit?(current_user) && @question.destroy
+    if current_user&.author_of?(@question) && @question.destroy
       flash[:success] = 'Question was successfully deleted.'
       redirect_to questions_path
     else
