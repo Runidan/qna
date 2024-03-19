@@ -22,20 +22,20 @@ RSpec.describe AnswersController do
     context 'with valid params' do
       it 'creates a new answer for the question' do
         expect do
-          post :create, params: { question_id: question.id, answer: answer_params }
+          post :create, params: { question_id: question.id, answer: answer_params }, format: :js
         end.to change(question.answers, :count).by(1)
       end
 
       it 'assigns the created answer to @answer' do
-        post :create, params: { question_id: question.id, answer: answer_params }
+        post :create, params: { question_id: question.id, answer: answer_params }, format: :js
         expect(assigns(:answer)).to be_a(Answer)
         expect(assigns(:answer).body).to eq(answer_params[:body])
       end
 
       it 'redirects to the question show page with anchor to the new answer' do
-        post :create, params: { question_id: question.id, answer: answer_params }
+        post :create, params: { question_id: question.id, answer: answer_params }, format: :js
         created_answer = question.answers.last
-        expect(response).to redirect_to(question_path(question, anchor: "answer-#{created_answer.id}"))
+        expect(response).to render_template(:create)
       end
     end
 
@@ -44,13 +44,13 @@ RSpec.describe AnswersController do
 
       it 'does not create a new answer' do
         expect do
-          post :create, params: { question_id: question.id, answer: answer_params }
+          post :create, params: { question_id: question.id, answer: answer_params }, format: :js
         end.not_to change(Answer, :count)
       end
 
       it 'renders the question show page' do
-        post :create, params: { question_id: question.id, answer: answer_params }
-        expect(response).to render_template('questions/show')
+        post :create, params: { question_id: question.id, answer: answer_params }, format: :js
+        expect(response).to render_template(:create)
       end
     end
   end

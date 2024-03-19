@@ -1,0 +1,7 @@
+- if answer.id
+  article class="mb-3" id="answer-#{answer.id}"
+    p= answer.user.email
+    p= answer.body
+    - if current_user&.author_of?(answer)
+      = link_to('Delete Answer', answer_path(answer), class: 'btn btn-danger btn-xs ml-3', method: :delete)
+    hr class="my-3"

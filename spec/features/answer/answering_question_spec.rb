@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 feature 'Answering a question.' do
-  describe 'Authinticated user' do
+  describe 'Authinticated user', js: true do
     given(:user) { create(:user) }
 
     background do
@@ -24,10 +24,11 @@ feature 'Answering a question.' do
       count_answers_before = page.all('.answers-list').size
       click_on 'Answer'
       expect(page.all('.answers-list').size).to eq count_answers_before
+      expect(page).to have_content("Body can't be blank")
     end
   end
 
-  scenario "unaunticated user can't answer a question" do
+  scenario "Unaunticated user can't answer a question" do
     question = create(:question)
     visit question_path(question)
     expect(page).to have_no_field('Body')

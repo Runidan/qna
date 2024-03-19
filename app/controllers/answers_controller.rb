@@ -5,20 +5,17 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: %i[destroy]
   before_action :load_question, only: %i[index create]
 
+
   def index
     redirect_to question_path @question
   end
 
   def create
-    @answer = @question.answers.build(answer_params)
-    @answer.user = current_user
-
-    if @answer.save
-      flash[:success] = 'Answer was  successfully added.'
-      redirect_to question_path(@question, anchor: "answer-#{@answer.id}")
-    else
-      render 'questions/show'
-    end
+    params_with_user_id = answer_params.merge(user_id: current_user.id)
+    @answer = @question.answers.create(params_with_user_id)
+    # TODO: условный редирект убрали, но
+    # как отправлять флеш-сообщение к успешно добавленному ответу?
+    # как открывать страницу на добавленном вопросе в случае успеха?
   end
 
   def destroy
