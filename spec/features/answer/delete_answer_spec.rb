@@ -16,7 +16,7 @@ feature 'Deleting answers.' do
     within("#answer-#{answer.id}") do
       click_on 'Delete Answer'
     end
-
+    
     expect(page).to have_content('Answer was successfully deleted.')
     expect(page).to have_no_content(answer.body)
   end

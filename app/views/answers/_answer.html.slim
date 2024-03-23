@@ -3,5 +3,10 @@
     p= answer.user.email
     p= answer.body
     - if current_user&.author_of?(answer)
-      = link_to('Delete Answer', answer_path(answer), class: 'btn btn-danger btn-xs ml-3', method: :delete)
-    hr class="my-3"
+      = link_to('Delete Answer', answer_path(answer), class: 'btn btn-danger btn-xs', method: :delete)
+      = link_to('Edit', '#', class: 'btn btn-secondary btn-xs ms-3 edit-answer-link', data: { answer_id: answer.id })
+  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"}, local: false do |f|
+    = f.label :body, 'Body'
+    = f.text_area :body
+    = f.submit 'Save'
+  hr class="my-3"

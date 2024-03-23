@@ -9,6 +9,7 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 require("jquery")
 import "channels"
+require("custom/answers")
 
 
 

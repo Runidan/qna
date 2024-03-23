@@ -54,4 +54,36 @@ RSpec.describe AnswersController do
       end
     end
   end
+
+  describe "PATCH #update" do
+    let!(:answer) { create(:answer, question_id: question.id, user_id: user.id )}
+  
+    context 'with valid params' do
+      it 'changes answer attributes' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'new body' 
+      end
+
+      it "render update view" do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        expect(response).to render_template :update 
+      end
+
+    end
+
+    context 'with invalid params' do
+      it 'does not change answer attributes' do
+        expect do
+          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid_answer) }, format: :js
+        end.to_not change(answer, :body)
+
+      end
+
+      it "render update view" do
+        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid_answer) }, format: :js
+        expect(response).to render_template :update  
+      end
+    end
+  end
 end
