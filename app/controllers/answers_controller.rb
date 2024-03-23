@@ -13,9 +13,13 @@ class AnswersController < ApplicationController
   def create
     params_with_user_id = answer_params.merge(user_id: current_user.id)
     @answer = @question.answers.create(params_with_user_id)
-    # TODO: условный редирект убрали, но
-    # как отправлять флеш-сообщение к успешно добавленному ответу?
-    # как открывать страницу на добавленном вопросе в случае успеха?
+    # TODO:как открывать страницу на добавленном вопросе в случае успеха?
+  end
+
+  def update
+    @answer = Answer.find(params[:id])
+    @answer.update(answer_params)
+    @question = @answer.question
   end
 
   def destroy
