@@ -18,17 +18,12 @@ class AnswersController < ApplicationController
 
   def update
     @answer = Answer.find(params[:id])
-    @answer.update(answer_params)
+    @answer.update(answer_params) if current_user&.author_of?(@answer)
     @question = @answer.question
   end
 
   def destroy
-    if current_user&.author_of?(@answer) && @answer.destroy
-      flash[:success] = 'Answer was successfully deleted.'
-      redirect_to question_path(@answer.question)
-    else
-      render 'questions/show'
-    end
+     @answer.destroy if current_user&.author_of?(@answer)
   end
 
   private
