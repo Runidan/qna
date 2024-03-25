@@ -8,9 +8,8 @@ p class="lead my-3"
   = link_to('Delete Question', question_path(@question), class: 'btn btn-danger mb-4', data: {method: :delete, confirm: 'Are you sure?'})
 
 - if current_user
-  .answer-errors
-    = render '/shared/errors', resource: @answer
-  = form_with model: [@question, @answer] do |f|
+  div class="answer-errors" id="create-answer-error"
+  = form_with model: [@question, @answer], local: false do |f|
     .field
       = f.label :body
       br
@@ -21,7 +20,8 @@ p class="lead my-3"
 hr class="my-3"
 
 .answers-list
-  = render @question.answers
+  = render partial: 'answers/best_answer', resource: @best_answer
+  = render partial: 'answers/answer', collection: @other_answers, as: :answer
   
 
 

@@ -10,4 +10,5 @@ RSpec.describe Question do
   it { is_expected.to have_db_column(:body).of_type(:text) }
   it { is_expected.to validate_presence_of(:body) }
   it { is_expected.to validate_presence_of(:user) }
+  it { is_expected.to validate_numericality_of(:best_answer_id).only_integer.allow_nil }
 end

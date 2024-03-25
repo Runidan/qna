@@ -2,13 +2,15 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy]
+  before_action :load_question, only: %i[show edit update destroy set_best_answer]
 
   def index
     @questions = Question.all
   end
 
   def show
+    @best_answer = @question.best_answer
+    @other_answers = @question.answers.where.not(id: @question.best_answer_id)
     @answer = @question.answers.build
   end
 
@@ -48,6 +50,16 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def set_best_answer
+    best_answer = Answer.find(params[:best_answer_id])
+
+    return unless current_user&.author_of?(@question) && @question.answers.include?(best_answer)
+
+    @question.update(best_answer:)
+    flash[:success] = 'Best answer has been set.'
+    redirect_to question_path(@question)
+  end
+
   private
 
   def load_question
@@ -55,6 +67,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :best_answer_id)
   end
 end

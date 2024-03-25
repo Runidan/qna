@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   devise_for :users
   resources :questions do
     resources :answers, shallow: true, except: %i[new show]
+    member do
+      post :set_best_answer
+    end
   end
 
   root to: 'questions#index'
