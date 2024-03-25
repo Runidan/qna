@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 feature 'Answering a question.' do
-  describe 'Authinticated user', js: true do
+  describe 'Authinticated user', :js do
     given(:user) { create(:user) }
 
     background do

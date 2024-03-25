@@ -7,4 +7,5 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
   validates :user, presence: true, associated: { class: User }
+  validates :best_answer_id, numericality: { only_integer: true, allow_nil: true }
 end

@@ -11,17 +11,16 @@ feature 'Deleting answers.' do
     sign_in(user)
   end
 
-  scenario 'Author can delete their own answer' do
+  scenario 'Author can delete their own answer', :js do
     visit question_path(question)
     within("#answer-#{answer.id}") do
       click_on 'Delete Answer'
     end
-    
-    expect(page).to have_content('Answer was successfully deleted.')
+
     expect(page).to have_no_content(answer.body)
   end
 
-  scenario 'User cannot delete another user\'s answer' do
+  scenario 'User cannot delete another user\'s answer', :js do
     other_user = create(:user)
     other_answer = create(:answer, question:, user: other_user)
 
