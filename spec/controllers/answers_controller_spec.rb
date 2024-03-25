@@ -17,9 +17,9 @@ RSpec.describe AnswersController do
   describe 'POST #create' do
     let(:answer_params) { { body: 'This is a test answer.' } }
 
-    before { login(user) }
+    context 'as an authenticated user with valid params' do
+      before { login(user) }
 
-    context 'with valid params' do
       it 'creates a new answer for the question' do
         expect do
           post :create, params: { question_id: question.id, answer: answer_params }, xhr: true
@@ -39,8 +39,10 @@ RSpec.describe AnswersController do
       end
     end
 
-    context 'with invalid params' do
+    context 'as an authenticated user with invalid params' do
       let(:answer_params) { { body: '' } }
+
+      before { login(user) }
 
       it 'does not create a new answer' do
         expect do
@@ -53,14 +55,23 @@ RSpec.describe AnswersController do
         expect(response).to render_template(:create)
       end
     end
+
+    context "as a guest with valid params" do
+      it 'does not create a new answer' do
+        expect do
+          post :create, params: { question_id: question.id, answer: answer_params }, xhr: true
+        end.not_to change(Answer, :count)
+      end
+    end
+    
   end
 
   describe 'PATCH #update' do
     let!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
 
-    before { login(user) }
-
     context 'with valid params' do
+      before { login(user) }
+
       it 'changes answer attributes' do
         patch :update, params: { id: answer, answer: { body: 'new body' } }, xhr: true
         answer.reload
@@ -74,6 +85,8 @@ RSpec.describe AnswersController do
     end
 
     context 'with invalid params' do
+      before { login(user) }
+
       it 'does not change answer attributes' do
         expect do
           patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid_answer) }, xhr: true
@@ -85,5 +98,14 @@ RSpec.describe AnswersController do
         expect(response).to render_template :update
       end
     end
+
+    context "as a guest" do
+      it "does not change answer attributes" do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, xhr: true
+        answer.reload
+        expect(answer.body).not_to eq 'new body'
+      end
+    end
+    
   end
 end
