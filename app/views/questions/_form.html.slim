@@ -11,4 +11,9 @@
       = f.label :body
     div class="col-sm-10"
       = f.text_area :body
+  div class="mb-3 row"
+    div class="col-sm-2 col-form-label"
+      = f.label :files
+    div class="col-sm-10"
+      = f.file_field :files, multiple: true
   = f.submit 'Ask', class: 'btn btn-primary'
