@@ -53,7 +53,10 @@ class QuestionsController < ApplicationController
   def set_best_answer
     best_answer = Answer.find(params[:best_answer_id])
 
-    return unless current_user&.author_of?(@question) && @question.answers.include?(best_answer)
+    unless current_user&.author_of?(@question) && @question.answers.include?(best_answer)
+      head :forbidden
+      return
+    end
 
     @question.update(best_answer:)
     flash[:success] = 'Best answer has been set.'
