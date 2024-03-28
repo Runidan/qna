@@ -3,6 +3,9 @@
     div class="answer-errors" id="answer-error-#{answer.id}"
     p= answer.user.email
     p= answer.body
+    - if answer.files.attached?
+      - answer.files.each do |file|
+        p= link_to file.filename.to_s, url_for(file)
     - if current_user&.author_of?(answer)
       = link_to('Delete Answer', answer_path(answer), method: :delete, class: 'btn btn-danger btn-xs delete-answer-link', data: { answer_id: answer.id }, remote: true)
       = link_to('Edit', '#', class: 'btn btn-secondary btn-xs ms-3 edit-answer-link', data: { answer_id: answer.id }, id: "link-edit-answer-#{answer.id}", remote: true)

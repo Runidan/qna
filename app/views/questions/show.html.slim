@@ -10,17 +10,13 @@ p class="lead my-3"
     p= link_to file.filename.to_s, url_for(file)
 
 - if current_user&.author_of?(@question)
-  = link_to('Delete Question', question_path(@question), class: 'btn btn-danger mb-4', data: {method: :delete, confirm: 'Are you sure?'})
+  .mb-4
+    = link_to('Delete Question', question_path(@question), class: 'btn btn-danger', data: {method: :delete, confirm: 'Are you sure?'})
+    = link_to('Edit question', edit_question_path(@question), class: 'btn btn-secondary ms-3')
 
 - if current_user
   div class="answer-errors" id="create-answer-error"
-  = form_with model: [@question, @answer], local: false do |f|
-    .field
-      = f.label :body
-      br
-      = f.text_area :body
-    .actions
-      = f.submit "Answer"
+    = render 'answers/form', question: @question, answer: @answer
 
 hr class="my-3"
 

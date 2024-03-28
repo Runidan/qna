@@ -13,9 +13,8 @@ feature 'Answering a question.' do
     end
 
     scenario 'can answer a question' do
-      within('.field') do
-        fill_in 'answer_body', with: 'This is the answer body text.'
-      end
+      fill_in 'answer_body', with: 'This is the answer body text.'
+
       click_on 'Answer'
       expect(page).to have_content('This is the answer body text.')
     end
@@ -25,6 +24,16 @@ feature 'Answering a question.' do
       click_on 'Answer'
       expect(page.all('.answers-list').size).to eq count_answers_before
       expect(page).to have_content("Body can't be blank")
+    end
+
+    scenario 'can add file to his anwer' do
+      fill_in 'answer_body', with: 'This is the answer body text.'
+      
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Answer'
+
+      expect(page).to have_link 'rails_helper.rb' 
+      expect(page).to have_link 'spec_helper.rb'
     end
   end
 
