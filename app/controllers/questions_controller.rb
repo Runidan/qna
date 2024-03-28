@@ -18,7 +18,11 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit; end
+  def edit
+    unless current_user&.author_of?(@question)
+      redirect_to question_path(@question), alert: "You can't edit this question"
+    end
+  end
 
   def create
     @question = Question.new(question_params)

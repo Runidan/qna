@@ -12,6 +12,15 @@
     .col-sm-10
       = f.text_area :body, class: 'field'
   .mb-3.row
+    .col-sm-10.offset-sm-2
+      - if @question.files.attached?
+        p Attached files:
+        ul
+          - @question.files.each do |file|
+            li class="file-#{file.id}"
+              = link_to file.filename.to_s, url_for(file)
+              = link_to 'Х', file_path(file), remote: true, class: 'ms-5', method: :delete, data: { confirm: 'Are you sure?', file_id: file.id }
+  .mb-3.row
     .col-sm-2.col-form-label
       = f.label :files
     .col-sm-10
