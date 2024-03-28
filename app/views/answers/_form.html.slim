@@ -1,0 +1,13 @@
+  = form_with model: [question, answer], local: false do |f|
+    .mb-3.row
+      .col-sm-2.col-form-label
+        = f.label :body
+      .col-sm-10
+        = f.text_area :body
+    .mb-3.row
+      .col-sm-2.col-form-label
+        = f.label :files
+      .col-sm-10
+        = f.file_field :files, multiple: true
+    .actions
+      = f.submit "Answer", class: 'btn btn-primary'
