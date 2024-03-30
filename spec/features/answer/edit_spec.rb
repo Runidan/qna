@@ -25,16 +25,26 @@ feature 'User can edit his answer', "
       visit question_path(question)
     end
 
-    scenario 'edit his answer', :js do
+    scenario 'edit his answer, add and delete files', :js do
       click_on 'Edit'
 
       within "article#answer-#{answer.id}" do
         fill_in 'Body', with: 'edited answer'
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
         click_on 'Save'
 
         expect(page).to have_no_content answer.body
         expect(page).to have_content 'edited answer'
         expect(page).to have_no_css 'textarea'
+        expect(page).to have_link 'rails_helper.rb' 
+        expect(page).to have_link 'spec_helper.rb' 
+
+        expect(page).to have_selector('li.attached-file', count: 2) 
+        first('a[data-method="delete"]').click
+        accept_confirm 'Are you sure?'
+        expect(page).to have_selector('li.attached-file', count: 1)
+
+
       end
     end
 

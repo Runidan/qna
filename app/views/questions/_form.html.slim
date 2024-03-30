@@ -6,20 +6,23 @@
       = f.label :title
     .col-sm-10
       = f.text_field :title, class: 'form-control' 
+
   .mb-3.row
     .col-sm-2.col-form-label
       = f.label :body
     .col-sm-10
-      = f.text_area :body, class: 'field'
-  .mb-3.row
-    .col-sm-10.offset-sm-2
-      - if @question.files.attached?
-        p Attached files:
-        ul
-          - @question.files.each do |file|
-            li class="file-#{file.id}"
-              = link_to file.filename.to_s, url_for(file)
-              = link_to 'Х', file_path(file), remote: true, class: 'ms-5', method: :delete, data: { confirm: 'Are you sure?', file_id: file.id }
+      = f.text_area :body, class: 'form-control'
+
+  - if @question.files.attached?
+    .mb-3.row
+      .col-sm-2.col-form-label
+        | Attached files:
+      .col-sm-10
+          ul.attached-files
+            - @question.files.each do |file|
+              li class="file-#{file.id}"
+                = link_to file.filename.to_s, url_for(file)
+                = link_to 'Х', file_path(file), remote: true, class: 'ms-5', method: :delete, data: { confirm: 'Are you sure?', file_id: file.id }
   .mb-3.row
     .col-sm-2.col-form-label
       = f.label :files

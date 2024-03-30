@@ -5,9 +5,9 @@
     p= answer.body
 
     - if answer.files.attached?
-      ul
+      ul.attached-files
         - answer.files.each do |file|
-          li class="file-#{file.id}"
+          li class="file-#{file.id} attached-file"
             = link_to file.filename.to_s, url_for(file)
             - if current_user&.author_of?(file.record)
                 = link_to 'Х', file_path(file), remote: true, class: 'ms-3', method: :delete, data: { confirm: 'Are you sure?', file_id: file.id }
