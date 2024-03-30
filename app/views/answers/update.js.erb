@@ -1,4 +1,5 @@
 $('.answer-errors#answer-error-' + <%= @answer.id %>).html('<%= render '/shared/errors', resource: @answer %>')
 <% if !@answer.errors.present? %>
-  $('.answers-list').html('<%= j render @question.answers %>')
+  $('#answer-' + <%= @answer.id %>).replaceWith('<%= j render @answer %>')
+  $('html, body').animate({ scrollTop: $('#answer-' + <%= @answer.id %>).offset().top }, 1000);
 <% end %>

@@ -2,4 +2,5 @@ $('#create-answer-error').html('<%= render '/shared/errors', resource: @answer %
 <% if @answer.persisted? %>
   $('.answers-list').append('<%= j render @answer %>')
   $('#answer_body').val('')
+  $('html, body').animate({ scrollTop: $('#answer-' + <%= @answer.id %>).offset().top }, 1000);
 <% end %>
