@@ -56,14 +56,13 @@ RSpec.describe AnswersController do
       end
     end
 
-    context "as a guest with valid params" do
+    context 'as a guest with valid params' do
       it 'does not create a new answer' do
         expect do
           post :create, params: { question_id: question.id, answer: answer_params }, xhr: true
         end.not_to change(Answer, :count)
       end
     end
-    
   end
 
   describe 'PATCH #update' do
@@ -99,13 +98,12 @@ RSpec.describe AnswersController do
       end
     end
 
-    context "as a guest" do
-      it "does not change answer attributes" do
+    context 'as a guest' do
+      it 'does not change answer attributes' do
         patch :update, params: { id: answer, answer: { body: 'new body' } }, xhr: true
         answer.reload
         expect(answer.body).not_to eq 'new body'
       end
     end
-    
   end
 end

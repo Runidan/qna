@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :answer do
     sequence(:body) { |n| "Answer №#{n}" }
 
-    user factory: %i[user]
+    user
   end
 
   trait :invalid_answer do

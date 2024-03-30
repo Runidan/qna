@@ -11,7 +11,7 @@ feature 'Log in' do
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
 
-    click_button 'Log in'
+    click_on 'Log in'
 
     expect(page).to have_current_path(root_path, ignore_query: true)
     expect(page).to have_content('Signed in successfully.')
