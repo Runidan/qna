@@ -5,7 +5,14 @@ FactoryBot.define do
     sequence(:title) { |n| "Question №#{n}" }
     sequence(:body) { |n| "Body for question №#{n}" }
 
-    user factory: %i[user]
+    user
+    files = []
+
+    after(:create) do |question, evaluator|
+      evaluator.files.each do |file|
+        question.files.attach(file)
+      end
+    end
 
     trait :invalid do
       title { nil }

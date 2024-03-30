@@ -2,8 +2,8 @@ require 'rails_helper'
 
 feature 'Editing question' do
   context "Authenticated user" do
-    given(:user) { create(:user)}
-    given(:question) {create(:question, user_id: user.id)}
+    given!(:user) { create(:user)}
+    given!(:question) {create(:question, user_id: user.id)}
 
     background do
       sign_in(user)
@@ -22,7 +22,7 @@ feature 'Editing question' do
       expect(page).to have_content "new question body"
     end
 
-    scenario 'can add files to his question' do
+    scenario 'can add and delete files to his question', js: true do
       visit edit_question_path(question)
       attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
 
@@ -30,6 +30,15 @@ feature 'Editing question' do
 
       expect(page).to have_link 'rails_helper.rb' 
       expect(page).to have_link 'spec_helper.rb' 
+
+      visit edit_question_path(question)
+
+      within '.attached-files' do
+        expect(page).to have_selector('li', count: 2) 
+        first('a[data-method="delete"]').click
+        accept_confirm 'Are you sure?'
+        expect(page).to have_selector('li', count: 1)
+      end
     end
   end
 end
