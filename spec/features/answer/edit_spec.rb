@@ -36,15 +36,13 @@ feature 'User can edit his answer', "
         expect(page).to have_no_content answer.body
         expect(page).to have_content 'edited answer'
         expect(page).to have_no_css 'textarea'
-        expect(page).to have_link 'rails_helper.rb' 
-        expect(page).to have_link 'spec_helper.rb' 
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
 
-        expect(page).to have_selector('li.attached-file', count: 2) 
+        expect(page).to have_css('li.attached-file', count: 2)
         first('a[data-method="delete"]').click
         accept_confirm 'Are you sure?'
-        expect(page).to have_selector('li.attached-file', count: 1)
-
-
+        expect(page).to have_css('li.attached-file', count: 1)
       end
     end
 

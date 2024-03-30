@@ -6,7 +6,6 @@ FactoryBot.define do
     sequence(:body) { |n| "Body for question №#{n}" }
 
     user
-    files = []
 
     after(:create) do |question, evaluator|
       evaluator.files.each do |file|

@@ -10,7 +10,7 @@ feature 'Sign out' do
 
     visit root_path
 
-    click_link 'Log out'
+    click_on 'Log out'
 
     expect(page).to have_current_path(root_path, ignore_query: true)
     expect(page).to have_content('Login')

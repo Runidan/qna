@@ -11,7 +11,7 @@ RSpec.describe Answer do
   it { is_expected.to validate_length_of(:body).is_at_least(3) }
   it { is_expected.to validate_length_of(:body).is_at_most(2000) }
 
-  it "have many atteches file" do
-    expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many) 
+  it 'have many atteches file' do
+    expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 end

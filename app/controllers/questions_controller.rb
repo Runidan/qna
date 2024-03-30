@@ -3,6 +3,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[show edit update destroy set_best_answer]
+  before_action :authorize_user!, only: %i[edit update destroy set_best_answer]
 
   def index
     @questions = Question.all
@@ -18,11 +19,7 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit
-    unless current_user&.author_of?(@question)
-      redirect_to question_path(@question), alert: "You can't edit this question"
-    end
-  end
+  def edit; end
 
   def create
     @question = Question.new(question_params)
@@ -37,7 +34,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user&.author_of?(@question) && @question.update(question_params)
+    if @question.update(question_params)
       flash[:success] = 'Question was successfully updated.'
       redirect_to @question
     else
@@ -46,7 +43,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user&.author_of?(@question) && @question.destroy
+    if @question.destroy
       flash[:success] = 'Question was successfully deleted.'
       redirect_to questions_path
     else
@@ -57,14 +54,13 @@ class QuestionsController < ApplicationController
   def set_best_answer
     best_answer = Answer.find(params[:best_answer_id])
 
-    unless current_user&.author_of?(@question) && @question.answers.include?(best_answer)
+    if @question.answers.include?(best_answer)
+      @question.update(best_answer:)
+      flash[:success] = 'Best answer has been set.'
+      redirect_to question_path(@question)
+    else
       head :forbidden
-      return
     end
-
-    @question.update(best_answer:)
-    flash[:success] = 'Best answer has been set.'
-    redirect_to question_path(@question)
   end
 
   private
@@ -75,5 +71,11 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, :best_answer_id, files: [])
+  end
+
+  def authorize_user!
+    return if current_user&.author_of?(@question)
+
+    head :forbidden
   end
 end
