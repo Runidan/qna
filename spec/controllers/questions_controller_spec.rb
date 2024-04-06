@@ -52,6 +52,10 @@ RSpec.describe QuestionsController do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
+    it 'assings a new link in Question to @link' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
+    end
+
     it 'render new view' do
       expect(response).to render_template :new
     end
