@@ -58,6 +58,7 @@ class QuestionsController < ApplicationController
 
     if @question.answers.include?(best_answer)
       @question.update(best_answer:)
+      @question.reward.update(answer: @answer) if @question.reward.present?
       flash[:success] = 'Best answer has been set.'
       redirect_to question_path(@question)
     else
@@ -72,7 +73,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, :best_answer_id, files: [], :links_attributes => %i[name url])
+    params.require(:question).permit(:title, :body, :best_answer_id, files: [], links_attributes: %i[id name url _destroy], reward_attributes: %i[name image id])
   end
 
   def authorize_user!

@@ -25,17 +25,28 @@
       = link_to('Edit', '#', class: 'btn btn-secondary btn-xs ms-3 edit-answer-link', data: { answer_id: answer.id }, id: "link-edit-answer-#{answer.id}", remote: true)
 
     - if current_user&.author_of?(answer.question)
-      = link_to('Mark as best', set_best_answer_question_path(answer.question_id, best_answer_id: answer.id,), class: 'btn btn-secondary btn-xs ms-3', method: :post)
+      = link_to('Mark as best', set_best_answer_question_path(answer.question_id, best_answer_id: answer.id,), class: 'btn btn-secondary btn-xs ms-3 btn-best-answer', method: :post)
 
     = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"}, local: false do |f|
       .mb-3.row
         p= f.label :body, 'Body'
         p= f.text_area :body
+
       .mb-3.row
         .col-sm-2.col-form-label
           = f.label :files
         .col-sm-10
           = f.file_field :files, multiple: true
+
+      .mb-3.row
+        .col-sm-2.col-form-label
+          | Links:
+        .col-sm-10
+          .row#links
+            = f.fields_for :links do |link|
+              = render 'link_fields', f: link
+            .links
+              = link_to_add_association 'Add link', f, :links
 
       p 
         = f.submit 'Save'

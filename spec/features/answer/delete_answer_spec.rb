@@ -20,6 +20,16 @@ feature 'Deleting answers.' do
     expect(page).to have_no_content(answer.body)
   end
 
+  scenario 'The author can delete the question that is marked the best', :js do
+    visit question_path(question)
+    within("#answer-#{answer.id}") do
+      click_on 'Mark as best'
+      click_on 'Delete Answer'
+    end
+
+    expect(page).to have_no_content(answer.body)
+  end
+
   scenario 'User cannot delete another user\'s answer', :js do
     other_user = create(:user)
     other_answer = create(:answer, question:, user: other_user)
