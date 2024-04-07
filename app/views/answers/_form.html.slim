@@ -9,17 +9,16 @@
         = f.label :files
       .col-sm-10
         = f.file_field :files, multiple: true
-        
+
     .mb-3.row
       .col-sm-2.col-form-label
-        = f.label :links
+        | Links:
       .col-sm-10
-        = f.fields_for :links do |l|
-          p
-            = l.label :name, 'Link name', class: "me-3"
-            = l.text_field :name
-          p
-            = l.label :url, class: "me-3"
-            = l.text_field :url
+        .row#links
+          = f.fields_for :links do |link|
+            = render 'link_fields', f: link
+          .links
+            = link_to_add_association 'Add link', f, :links
+
     .actions
       = f.submit "Answer", class: 'btn btn-primary'

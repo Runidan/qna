@@ -1,27 +1,37 @@
 = render '/shared/errors', resource: @question
 h1 class="mb-4" = @question.title
 
-p= @question.user.email
-p class="lead my-3" 
-  = @question.body
+.container
+  .row
+    .col-10
+      p= @question.user.email
+      p class="lead my-3" 
+        = @question.body
 
-- if @question.files.attached?
-  - @question.files.each do |file|
-    p
-      = link_to file.filename.to_s, url_for(file)
+      - if @question.files.attached?
+        - @question.files.each do |file|
+          p
+            = link_to file.filename.to_s, url_for(file)
 
-.links 
-  p 
-    | Links: 
-    ul
-      - @question.links.each do |link|
-        li= link_to link.name, link.url
+      .links 
+        p 
+          | Links: 
+          ul
+            - @question.links.each do |link|
+              li= link_to link.name, link.url
 
-- if current_user&.author_of?(@question)
-  .mb-4
-    = link_to('Delete Question', question_path(@question), class: 'btn btn-danger', data: {method: :delete, confirm: 'Are you sure?'})
-    = link_to('Edit question', edit_question_path(@question), class: 'btn btn-secondary ms-3')
-
+      - if current_user&.author_of?(@question)
+        .mb-4
+          = link_to('Delete Question', question_path(@question), class: 'btn btn-danger', data: {method: :delete, confirm: 'Are you sure?'})
+          = link_to('Edit question', edit_question_path(@question), class: 'btn btn-secondary ms-3')
+    .col
+      .row 
+        - if @question.reward
+          p 
+            | Награда за лучший ответ: 
+            span.fw-bold
+              = @question.reward.name
+          = image_tag @question.reward.image, class: 'img-fluid' if @question.reward.image.attached?
 hr.mb-3
 
 - if current_user
