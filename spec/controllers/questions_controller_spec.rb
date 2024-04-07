@@ -31,6 +31,11 @@ RSpec.describe QuestionsController do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
+    it 'assigns a new link to @answer' do
+      get :show, params: { id: question }
+      expect(assigns(:answer).links.first).to be_a_new(Link)
+    end
+
     it 'renders the show template' do
       get :show, params: { id: question }
       expect(response).to render_template(:show)

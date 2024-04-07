@@ -12,6 +12,14 @@
             - if current_user&.author_of?(file.record)
                 = link_to 'Х', file_path(file), remote: true, class: 'ms-3', method: :delete, data: { confirm: 'Are you sure?', file_id: file.id }
 
+    - if answer.links.exists?
+      .links 
+        p 
+          | Links: 
+          ul
+            - answer.links.each do |link|
+              li= link_to link.name, link.url
+
     - if current_user&.author_of?(answer)
       = link_to('Delete Answer', answer_path(answer), method: :delete, class: 'btn btn-danger btn-xs delete-answer-link', data: { answer_id: answer.id }, remote: true)
       = link_to('Edit', '#', class: 'btn btn-secondary btn-xs ms-3 edit-answer-link', data: { answer_id: answer.id }, id: "link-edit-answer-#{answer.id}", remote: true)
