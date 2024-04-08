@@ -1,6 +1,6 @@
 = render '/shared/errors', resource: @question
 
-= form_with model: @question do |f|
+= form_with model: @question, local: true do |f|
   .mb-3.row
     .col-sm-2.col-form-label
       = f.label :title
@@ -22,7 +22,7 @@
             - @question.files.each do |file|
               li class="file-#{file.id}"
                 = link_to file.filename.to_s, url_for(file)
-                = link_to 'Х', file_path(file), remote: true, class: 'ms-5', method: :delete, data: { confirm: 'Are you sure?', file_id: file.id }
+                = link_to 'Х', file_path(file.id), remote: true, class: 'ms-5', method: :delete, data: { confirm: 'Are you sure?', file_id: file.id }
   .mb-3.row
     .col-sm-2.col-form-label
       = f.label :files
@@ -39,18 +39,17 @@
         .links
           = link_to_add_association 'add task', f, :links
 
-  .row.md-3 
+  .row.md-3.set-reward 
     .col-sm-2.col-form-label
       | Reward:
     .col-sm-10
-      = f.fields_for :reward, @question.reward || Reward.new do |r|
+      = f.fields_for :reward do |r|
         .row
           = r.label :name
           = r.text_field :name
         .row 
           = r.label :image
           = r.file_field :image
-
 
   div
     - submit_button_text = @question.new_record? ? 'Ask' : 'Save'
