@@ -3,7 +3,7 @@
 class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable
-  has_one :reward
+  has_one :reward, dependent: :destroy, inverse_of: :question
   belongs_to :best_answer, class_name: 'Answer', optional: true
   belongs_to :user, foreign_key: :user_id
 
