@@ -1,9 +1,9 @@
-class ProfilesController < ApplicationController
-  before_action :load_profile, only: [:show, :edit, :update]
+# frozen_string_literal: true
 
-  def show
-    
-  end
+class ProfilesController < ApplicationController
+  before_action :load_profile, only: %i[show edit update]
+
+  def show; end
 
   def edit; end
 

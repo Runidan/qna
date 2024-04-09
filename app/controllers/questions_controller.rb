@@ -76,7 +76,8 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, :best_answer_id, files: [], links_attributes: %i[id name url _destroy], reward_attributes: %i[id name image])
+    params.require(:question).permit(:title, :body, :best_answer_id, files: [],
+                                                                     links_attributes: %i[id name url _destroy], reward_attributes: %i[id name image])
   end
 
   def authorize_user!

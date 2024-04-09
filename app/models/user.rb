@@ -17,12 +17,13 @@ class User < ApplicationRecord
 
   def best_answer_rewards
     Reward.joins(question: :best_answer)
-          .where(questions: { best_answer_id: self.user.answers.select(:id) })
+          .where(questions: { best_answer_id: user.answers.select(:id) })
   end
 
   private
+
   def build_default_profile
-    user_name = self.email.split('@')[0]
-    self.build_profile(name: user_name).save
+    user_name = email.split('@')[0]
+    build_profile(name: user_name).save
   end
 end
