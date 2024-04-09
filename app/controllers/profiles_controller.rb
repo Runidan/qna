@@ -2,6 +2,7 @@
 
 class ProfilesController < ApplicationController
   before_action :load_profile, only: %i[show edit update]
+  before_action :authorize_user!, only: %i[edit update]
 
   def show; end
 
@@ -23,5 +24,11 @@ class ProfilesController < ApplicationController
 
   def profile_params
     params.require(:profile).permit(:name)
+  end
+
+  def authorize_user!
+    return if current_user == @profile.user
+
+    head :forbidden
   end
 end
