@@ -1,0 +1,34 @@
+.section 
+  .container
+    h1
+      | User profile 
+.section 
+  .container
+    .row.mb-3
+      .col-2 
+        | User name:
+      .col-10 
+        = @profile.name
+    .row.mb-3
+      .col-2 
+        | Email:
+      .col-10
+        = @profile.user.email
+    .row.mb-3
+      .col
+        = link_to "Edit", edit_profile_path(@profile), class: 'btn btn-secondary'
+    - if @profile.best_answer_rewards.any?
+
+      h2 
+        | User rewards
+
+      .row.mb-3
+      - @profile.best_answer_rewards.each do |reward|
+        .card style="width: 18rem;"
+          = image_tag reward.image, class: 'card-img-top'
+          .card-body
+            .card-title
+              = reward.name
+            .card-text
+              = link_to reward.question.title, question_path(reward.question)
+
