@@ -11,6 +11,7 @@ import "channels"
 require("jquery")
 require("@nathanvda/cocoon")
 require("custom/answers")
+require("custom/gist_load")
 
 
 
