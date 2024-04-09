@@ -25,7 +25,6 @@ feature 'Marking best answer', :js do
       within '.best-answer' do
         expect(page).to have_content answer.body
       end
-
     end
   end
 

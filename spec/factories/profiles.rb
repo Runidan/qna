@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :profile do
-    association :user
-    name { "User Name" }
+    user
+    name { 'User Name' }
   end
 end

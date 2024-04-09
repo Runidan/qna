@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe ProfilesController, type: :controller do
+RSpec.describe ProfilesController do
   let(:user) { create(:user) }
   let(:profile) { user.profile }
-  
+
   before do
     sign_in user
   end
-  
+
   describe 'GET #show' do
     it 'assigns the requested profile to @profile' do
       get :show, params: { id: profile.id }
@@ -48,9 +50,9 @@ RSpec.describe ProfilesController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not update the profile' do
-        expect {
+        expect do
           patch :update, params: { id: profile.id, profile: { name: nil } }
-        }.not_to change { profile.reload.name }
+        end.not_to(change { profile.reload.name })
       end
 
       it 're-renders the :edit template' do
