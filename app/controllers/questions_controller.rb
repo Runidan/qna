@@ -22,7 +22,9 @@ class QuestionsController < ApplicationController
     @question.build_reward
   end
 
-  def edit; end
+  def edit
+    @question.build_reward if @question.reward.nil?
+  end
 
   def create
     @question = Question.new(question_params)

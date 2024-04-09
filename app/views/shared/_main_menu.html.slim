@@ -10,7 +10,7 @@ header class="p-3 bg-dark text-white"
       ul class="nav col-12 col-lg-auto mb-2 mb-md-0"
         -if current_user
           li.nav-link.px-2.text-white
-            = current_user.email
+            = link_to current_user.profile.name, profile_path(current_user.profile)
           li
             = link_to("Log out", destroy_user_session_path, method: :delete, class: "nav-link px-2")
         -else

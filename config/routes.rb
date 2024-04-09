@@ -11,5 +11,7 @@ Rails.application.routes.draw do
 
   resources :files, only: [:destroy]
 
+  resources :profiles, only: [:show, :edit, :update]
+
   root to: 'questions#index'
 end

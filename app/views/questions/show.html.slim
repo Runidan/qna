@@ -28,7 +28,7 @@ h1 class="mb-4" = @question.title
       .row 
         - if @question.reward
           p 
-            | Награда за лучший ответ: 
+            | Reward for a best answer: 
             span.fw-bold
               = @question.reward.name
           = image_tag @question.reward.image, class: 'img-fluid' if @question.reward.image.attached?
