@@ -25,7 +25,7 @@ feature 'Marking best answer', :js do
 
       expect(page).to have_content 'Best answer has been set.'
 
-      visit profile_path(user.profile)
+      visit user_path(user)
       expect(page).to have_content('Reward Name')
       expect(page).to have_css("img[src$='reward_image.jpg']")
     end
