@@ -8,10 +8,8 @@ Rails.application.routes.draw do
       post :set_best_answer
     end
   end
-
+  resources :users, only: [:show]
   resources :files, only: [:destroy]
-
-  resources :profiles, only: %i[show edit update]
 
   root to: 'questions#index'
 end
