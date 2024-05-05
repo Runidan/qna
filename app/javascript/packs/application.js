@@ -10,6 +10,7 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 require("jquery")
 require("@nathanvda/cocoon")
+require("custom/questions")
 require("custom/answers")
 require("custom/gist_load")
 

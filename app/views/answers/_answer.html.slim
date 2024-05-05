@@ -20,13 +20,25 @@
             - answer.links.each do |link|
               li= link_to link.name, link.url
 
+    .row.mb-3
+      .col
+        .rating
+          .rating-messages
+          | Rating: 
+          span.rating-value = answer.rating
+          - vote_btn_class = 'btn btn-light ms-3 vote_btn' + (current_user&.can_vote_for?(answer) ? '' : ' hidden')
+          = link_to '+', vote_up_answer_path(answer), class: vote_btn_class, method: :post, remote: true
+          = link_to '-', vote_down_answer_path(answer), class: vote_btn_class, method: :post, remote: true
+          - unvote_btn_value = 'btn btn-light ms-3 unvote_btn' + (current_user&.voted_for?(answer) ? '' : ' hidden')
+          = link_to'Unvote', unvote_answer_path(answer), class: unvote_btn_value, method: :delete, remote: true
+
     - if current_user&.author_of?(answer)
       = link_to('Delete Answer', answer_path(answer), method: :delete, class: 'btn btn-danger btn-xs delete-answer-link', data: { answer_id: answer.id }, remote: true)
       = link_to('Edit', '#', class: 'btn btn-secondary btn-xs ms-3 edit-answer-link', data: { answer_id: answer.id }, id: "link-edit-answer-#{answer.id}", remote: true)
 
     - if current_user&.author_of?(answer.question)
       = link_to('Mark as best', set_best_answer_question_path(answer.question_id, best_answer_id: answer.id,), class: 'btn btn-secondary btn-xs ms-3 btn-best-answer', method: :post)
-
+    
     = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"}, local: false do |f|
       .mb-3.row
         p= f.label :body, 'Body'

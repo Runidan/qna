@@ -32,11 +32,25 @@ h1 class="mb-4" = @question.title
             span.fw-bold
               = @question.reward.name
           = image_tag @question.reward.image, class: 'img-fluid' if @question.reward.image.attached?
+  .row 
+    .col
+      .question-rating
+        .rating-messages
+        | Rating: 
+        span.rating-value = @question.rating
+        - vote_btn_class = 'btn btn-light ms-3 vote_btn' + (current_user&.can_vote_for?(@question) ? '' : ' hidden')
+        = link_to '+', vote_up_question_path(@question), class: vote_btn_class, method: :post, remote: true
+        = link_to '-', vote_down_question_path(@question), class: vote_btn_class, method: :post, remote: true
+        - unvote_btn_value = 'btn btn-light ms-3 unvote_btn' + (current_user&.voted_for?(@question) ? '' : ' hidden')
+        = link_to'Unvote', unvote_question_path(@question), class: unvote_btn_value, method: :delete, remote: true
+
+
 hr.mb-3
 
 - if current_user
   p 
     | Your answer is...
+  .your-answer
   div class="answer-errors" id="create-answer-error"
   = render 'answers/form', question: @question, answer: @answer
 
