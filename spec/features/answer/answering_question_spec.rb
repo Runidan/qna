@@ -23,7 +23,7 @@ feature 'Answering a question.' do
       count_answers_before = page.all('.answers-list').size
       click_on 'Answer'
       expect(page.all('.answers-list').size).to eq count_answers_before
-      expect(page).to have_content("Body is too short")
+      expect(page).to have_content('Body is too short')
     end
 
     scenario 'can add file to his anwer' do

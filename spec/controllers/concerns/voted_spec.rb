@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe Voted, type: :controller do
+RSpec.describe Voted do
   controller(ApplicationController) do
-    include Voted
+    include described_class
   end
 
-  let(:user) { FactoryBot.create(:user) }
-  let(:question) { FactoryBot.create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question) }
 
   before do
     sign_in user
@@ -20,7 +22,7 @@ RSpec.describe Voted, type: :controller do
 
     context 'user can vote for the question' do
       it 'increments the votable rating' do
-        expect { post :vote_up, params: { id: question.id } }.to change{ question.reload.rating }.by(1)
+        expect { post :vote_up, params: { id: question.id } }.to change { question.reload.rating }.by(1)
         expect(response).to have_http_status(:ok)
         expect(json_response['voted']).to be true
       end
@@ -32,7 +34,7 @@ RSpec.describe Voted, type: :controller do
       end
 
       it 'does not increment the votable rating' do
-        expect { post :vote_up, params: {id: question.id } }.to_not change{ question.reload.rating }
+        expect { post :vote_up, params: { id: question.id } }.not_to(change { question.reload.rating })
         expect(response).to have_http_status(:forbidden)
         expect(json_response['error']).to match(/can't vote for your own post or vote twice/)
       end
@@ -41,10 +43,11 @@ RSpec.describe Voted, type: :controller do
 
   describe 'POST #vote_down' do
     before { routes.draw { post 'vote_down' => 'anonymous#vote_down' } }
+
     context 'when user can vote' do
       it 'decreases the question rating' do
         allow(user).to receive(:can_vote_for?).with(question).and_return(true)
-        
+
         expect { post :vote_down, params: { id: question.id } }
           .to change { question.reload.rating }.by(-1)
         expect(response).to have_http_status(:ok)
@@ -56,15 +59,15 @@ RSpec.describe Voted, type: :controller do
     context 'when user can not vote (e.g., owns the question or already voted)' do
       it 'does not change the question rating and returns forbidden status' do
         allow(user).to receive(:can_vote_for?).and_return(false)
-        
+
         expect { post :vote_down, params: { id: question.id } }
-          .not_to change { question.reload.rating }
+          .not_to(change { question.reload.rating })
         expect(response).to have_http_status(:forbidden)
         expect(json_response['error']).to eq "You can't vote for your own post or vote twice."
       end
     end
   end
-  
+
   describe 'DELETE #unvote' do
     before { routes.draw { post 'unvote' => 'anonymous#unvote' } }
 
@@ -74,9 +77,9 @@ RSpec.describe Voted, type: :controller do
       end
 
       it 'removes the vote from votable object' do
-        expect {
+        expect do
           delete :unvote, params: { id: question }, format: :json
-        }.to change(question.votes, :count).by(-1)
+        end.to change(question.votes, :count).by(-1)
         expect(response).to have_http_status(:ok)
         expect(json_response['voted']).to be false
       end
@@ -84,15 +87,15 @@ RSpec.describe Voted, type: :controller do
 
     context 'when the user has not voted' do
       it 'does not change vote count and returns not found status' do
-        expect {
+        expect do
           delete :unvote, params: { id: question }, format: :json
-        }.not_to change(question.votes, :count)
+        end.not_to change(question.votes, :count)
         expect(response).to have_http_status(:not_found)
         expect(json_response['error']).to eq("You haven't voted for this.")
       end
     end
   end
-  
+
   def json_response
     JSON.parse(response.body)
   end

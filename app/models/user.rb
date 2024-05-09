@@ -19,7 +19,7 @@ class User < ApplicationRecord
   end
 
   def voted_for?(votable)
-    votes.where(votable: votable).exists?
+    votes.where(votable:).exists?
   end
 
   def can_vote_for?(votable)
