@@ -11,8 +11,6 @@ $(document).on('turbolinks:load', function(){
       $('.question-rating .vote_btn').removeClass('hidden');
       $('.question-rating .unvote_btn').addClass('hidden');
     }
-
-
   })
     .on('ajax:error', function(e) {
       var errors = e.detail[0];
