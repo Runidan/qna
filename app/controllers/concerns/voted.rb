@@ -44,5 +44,4 @@ module  Voted
       request.path.split('/')[1].singularize.capitalize
     end
   end
-  
 end
