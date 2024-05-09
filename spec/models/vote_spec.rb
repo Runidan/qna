@@ -1,5 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Vote, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user) { create(:user) }
+  let(:question) { create(:question) }  
+  let(:vote) { create(:vote, votable: question, user: user) }
+  
+  describe 'associations' do
+    it { is_expected.to belong_to(:votable) }
+    it { is_expected.to belong_to(:user) }
+  end
+  
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:votable) }
+    it { is_expected.to validate_presence_of(:user) }
+    it { is_expected.to validate_presence_of(:value) }
+    it { is_expected.to validate_inclusion_of(:value).in_array([-1, 1]) }
+    
+  end
 end

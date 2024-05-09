@@ -1,8 +1,8 @@
 = render '/shared/errors', resource: @question
-h1 class="mb-4" = @question.title
 
-.container
+.container.question
   .row
+    h1 class="mb-4" = @question.title
     .col-10
       p= @question.user.email
       p class="lead my-3" 

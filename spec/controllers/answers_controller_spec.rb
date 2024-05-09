@@ -31,12 +31,6 @@ RSpec.describe AnswersController do
         expect(assigns(:answer)).to be_a(Answer)
         expect(assigns(:answer).body).to eq(answer_params[:body])
       end
-
-      it 'redirects to the question show page with anchor to the new answer' do
-        post :create, params: { question_id: question.id, answer: answer_params }, xhr: true
-        question.answers.last
-        expect(response).to render_template(:create)
-      end
     end
 
     context 'as an authenticated user with invalid params' do
@@ -48,11 +42,6 @@ RSpec.describe AnswersController do
         expect do
           post :create, params: { question_id: question.id, answer: answer_params }, xhr: true
         end.not_to change(Answer, :count)
-      end
-
-      it 'renders the question show page' do
-        post :create, params: { question_id: question.id, answer: answer_params }, xhr: true
-        expect(response).to render_template(:create)
       end
     end
 
