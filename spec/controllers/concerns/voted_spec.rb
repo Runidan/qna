@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Voted do
   controller(ApplicationController) do
-    include described_class
+    include Voted
   end
 
   let(:user) { create(:user) }
@@ -94,9 +94,5 @@ RSpec.describe Voted do
         expect(json_response['error']).to eq("You haven't voted for this.")
       end
     end
-  end
-
-  def json_response
-    JSON.parse(response.body)
   end
 end
