@@ -36,7 +36,6 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
-  config.include WaitForAjax, type: :feature
   config.include JsonHelpers, type: :controller
 
   Capybara.javascript_driver = :selenium_chrome_headless
