@@ -158,10 +158,9 @@ RSpec.describe QuestionsController do
     end
   end
 
-  describe "POST #upvote" do
-    
+  describe 'POST #upvote' do
     context 'user can vote for the question' do
-      before { login(other_user) } 
+      before { login(other_user) }
 
       it 'increments the votable rating' do
         expect { post :vote_up, params: { id: question.id } }.to change { question.reload.rating }.by(1)
@@ -184,7 +183,7 @@ RSpec.describe QuestionsController do
     end
   end
 
-  describe "POST #downvote" do
+  describe 'POST #downvote' do
     context 'when user can vote' do
       before { login(other_user) }
 
@@ -212,9 +211,8 @@ RSpec.describe QuestionsController do
       end
     end
   end
-  
-  describe 'DELETE #unvote' do
 
+  describe 'DELETE #unvote' do
     context 'when the user has voted' do
       before do
         login(other_user)
@@ -232,6 +230,7 @@ RSpec.describe QuestionsController do
 
     context 'when the user has not voted' do
       before { login(user) }
+
       it 'does not change vote count and returns not found status' do
         expect do
           delete :unvote, params: { id: question }, format: :json

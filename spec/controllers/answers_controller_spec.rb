@@ -8,7 +8,6 @@ RSpec.describe AnswersController do
   let(:other_user) { create(:user) }
   let(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
 
-
   describe 'GET #index' do
     before { get :index, params: { question_id: question.id } }
 
@@ -99,10 +98,9 @@ RSpec.describe AnswersController do
     end
   end
 
-  describe "POST #upvote" do
-    
+  describe 'POST #upvote' do
     context 'user can vote for the answer' do
-      before do 
+      before do
         login(other_user)
       end
 
@@ -127,9 +125,9 @@ RSpec.describe AnswersController do
     end
   end
 
-  describe "POST #downvote" do
+  describe 'POST #downvote' do
     context 'when user can vote' do
-      before do 
+      before do
         login(other_user)
       end
 
@@ -159,7 +157,6 @@ RSpec.describe AnswersController do
   end
 
   describe 'DELETE #unvote' do
-
     context 'when the user has voted' do
       before do
         login(other_user)
@@ -177,6 +174,7 @@ RSpec.describe AnswersController do
 
     context 'when the user has not voted' do
       before { login(other_user) }
+
       it 'does not change vote count and returns not found status' do
         expect do
           delete :unvote, params: { id: answer }, format: :json
