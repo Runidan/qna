@@ -7,6 +7,7 @@ RSpec.feature 'User voting for a votable (question/answer)' do
   given(:user2) { create(:user) }
   given(:other_user) { create(:user) }
   given(:question) { create(:question, user: other_user) }
+  given(:user_question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question:, user: other_user) }
 
   background do
@@ -23,8 +24,8 @@ RSpec.feature 'User voting for a votable (question/answer)' do
   end
 
   scenario 'User can not vote for his own question', :js do
-    question.update(user:) # Make the authenticated user an author
-    visit question_path(question)
+
+    visit question_path(user_question)
 
     within '.question' do
       expect(page).to have_no_link('+')
@@ -49,6 +50,8 @@ RSpec.feature 'User voting for a votable (question/answer)' do
 
       click_on '-'
       expect(page).to have_content('-1')
+      click_on 'Unvote'
+      expect(page).to have_content('0')
     end
   end
 
