@@ -15,10 +15,27 @@ $(document).on('turbolinks:load', function(){
   })
 
   $('form.new-answer').on('ajax:success', function(e) {
-    var answer = e.detail[0];
+    var jsonData = e.detail[0];
+    console.log(jsonData);
+    $('.your-answer').empty();
+    $('<p>').text(jsonData.answer.body).appendTo('.your-answer');
 
+    var $linksList = $('<ul>');
+    $.each(jsonData.links, function(i, link) {
+      var $linkItem = $('<li>');
+      $('<a>').attr('href', link.url).text(link.name).appendTo($linkItem);
+      $linksList.append($linkItem);
+    });
+    $linksList.appendTo('.your-answer');
 
-    $('.your-answer').append('<p>' + answer.body + '</p>');
+    var $filesList = $('<ul>');
+    $.each(jsonData.files, function(i, fileUrl) {
+      var splitUrl = fileUrl.split('/');
+      var fileName = splitUrl[splitUrl.length - 1];
+      var $fileLink = $('<a>').attr('href', fileUrl).text(fileName);
+      $('<li>').append($fileLink).appendTo($filesList);
+    });
+    $('.your-answer').append($filesList);
   })
     .on('ajax:error', function(e) {
       var errors = e.detail[0];

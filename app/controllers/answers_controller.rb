@@ -18,7 +18,13 @@ class AnswersController < ApplicationController
 
     respond_to do |format|
       if @answer.save
-        format.json { render json: @answer }
+        format.json do
+          render json: {
+            answer: @answer,
+            files: @answer.files.map { |file| url_for(file) },
+            links: @answer.links
+          }
+        end
       else
         format.json do
           render json: @answer.errors.full_messages, status: :unprocessable_entity

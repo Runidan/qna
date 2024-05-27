@@ -21,8 +21,7 @@ feature 'User can add links to answer', "
     fill_in 'Link name',	with: 'My gist'
     fill_in 'Url',	with: gist_url
     click_on 'Answer'
-    page.refresh
-    within '.answers-list' do
+    within '.your-answer' do
       expect(page).to have_link 'My gist', href: gist_url
     end
   end
