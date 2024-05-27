@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
   before_action :load_question, only: %i[show edit update destroy set_best_answer]
   before_action :authorize_user!, only: %i[edit update destroy set_best_answer]
 
+  include Voted
+
   def index
     @questions = Question.all
   end
@@ -77,7 +79,8 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, :best_answer_id, files: [],
-                                                                     links_attributes: %i[id name url _destroy], reward_attributes: %i[id name image])
+                                                                     links_attributes: %i[id name url _destroy],
+                                                                     reward_attributes: %i[id name image])
   end
 
   def authorize_user!

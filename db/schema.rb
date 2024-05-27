@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_240_407_134_107) do
+ActiveRecord::Schema.define(version: 20_240_505_114_218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -98,6 +98,19 @@ ActiveRecord::Schema.define(version: 20_240_407_134_107) do
     t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
   end
 
+  create_table 'votes', force: :cascade do |t|
+    t.integer 'value'
+    t.bigint 'user_id', null: false
+    t.string 'votable_type', null: false
+    t.bigint 'votable_id', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index %w[user_id votable_type votable_id], name: 'index_votes_on_user_id_and_votable_type_and_votable_id',
+                                                 unique: true
+    t.index ['user_id'], name: 'index_votes_on_user_id'
+    t.index %w[votable_type votable_id], name: 'index_votes_on_votable'
+  end
+
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'active_storage_variant_records', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'answers', 'users'
@@ -105,4 +118,5 @@ ActiveRecord::Schema.define(version: 20_240_407_134_107) do
   add_foreign_key 'questions', 'users'
   add_foreign_key 'rewards', 'answers'
   add_foreign_key 'rewards', 'questions'
+  add_foreign_key 'votes', 'users'
 end

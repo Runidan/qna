@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe QuestionsController do
   let(:user) { create(:user) }
   let(:question) { create(:question, user:) }
+  let(:other_user) { create(:user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3, user:) }
@@ -154,6 +155,89 @@ RSpec.describe QuestionsController do
     it 'redirect to index' do
       delete :destroy, params: { id: question }
       expect(response).to redirect_to questions_path
+    end
+  end
+
+  describe 'POST #upvote' do
+    context 'user can vote for the question' do
+      before { login(other_user) }
+
+      it 'increments the votable rating' do
+        expect { post :vote_up, params: { id: question.id } }.to change { question.reload.rating }.by(1)
+        expect(response).to have_http_status(:ok)
+        expect(json_response['voted']).to be true
+      end
+    end
+
+    context 'user cannot vote for the question (e.g., voting for own question)' do
+      before do
+        login(user)
+        allow(user).to receive(:can_vote_for?).with(question).and_return(false)
+      end
+
+      it 'does not increment the votable rating' do
+        expect { post :vote_up, params: { id: question.id } }.not_to(change { question.reload.rating })
+        expect(response).to have_http_status(:forbidden)
+        expect(json_response['error']).to match(/can't vote for your own post or vote twice/)
+      end
+    end
+  end
+
+  describe 'POST #downvote' do
+    context 'when user can vote' do
+      before { login(other_user) }
+
+      it 'decreases the question rating' do
+        allow(other_user).to receive(:can_vote_for?).with(question).and_return(true)
+
+        expect { post :vote_down, params: { id: question.id } }
+          .to change { question.reload.rating }.by(-1)
+        expect(response).to have_http_status(:ok)
+        expect(json_response['rating']).to eq question.rating
+        expect(json_response['voted']).to be true
+      end
+    end
+
+    context 'when user can not vote (e.g., owns the question or already voted)' do
+      before { login(user) }
+
+      it 'does not change the question rating and returns forbidden status' do
+        allow(user).to receive(:can_vote_for?).and_return(false)
+
+        expect { post :vote_down, params: { id: question.id } }
+          .not_to(change { question.reload.rating })
+        expect(response).to have_http_status(:forbidden)
+        expect(json_response['error']).to eq "You can't vote for your own post or vote twice."
+      end
+    end
+  end
+
+  describe 'DELETE #unvote' do
+    context 'when the user has voted' do
+      before do
+        login(other_user)
+        question.vote_up_by(other_user)
+      end
+
+      it 'removes the vote from votable object' do
+        expect do
+          delete :unvote, params: { id: question }, format: :json
+        end.to change(question.votes, :count).by(-1)
+        expect(response).to have_http_status(:ok)
+        expect(json_response['voted']).to be false
+      end
+    end
+
+    context 'when the user has not voted' do
+      before { login(user) }
+
+      it 'does not change vote count and returns not found status' do
+        expect do
+          delete :unvote, params: { id: question }, format: :json
+        end.not_to change(question.votes, :count)
+        expect(response).to have_http_status(:not_found)
+        expect(json_response['error']).to eq("You haven't voted for this.")
+      end
     end
   end
 end

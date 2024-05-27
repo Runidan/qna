@@ -6,6 +6,8 @@ class AnswersController < ApplicationController
   before_action :load_question, only: %i[index create]
   before_action :authorize_user!, only: %i[update destroy]
 
+  include Voted
+
   def index
     redirect_to question_path @question
   end
@@ -13,6 +15,22 @@ class AnswersController < ApplicationController
   def create
     params_with_user_id = answer_params.merge(user_id: current_user.id)
     @answer = @question.answers.create(params_with_user_id)
+
+    respond_to do |format|
+      if @answer.save
+        format.json do
+          render json: {
+            answer: @answer,
+            files: @answer.files.map { |file| url_for(file) },
+            links: @answer.links
+          }
+        end
+      else
+        format.json do
+          render json: @answer.errors.full_messages, status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   def update
